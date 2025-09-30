@@ -12,7 +12,7 @@ contract StakingContract is Ownable {
     mapping(address => uint256) stakeMapping;
     mapping(address => uint256) lastStakedTime;
     mapping(address => uint256) rewards;
-    uint16 constant REWARD_MULTIPLIER = 1000;
+    uint16 constant REWARD_MULTIPLIER = 10000;
 
     constructor(address _rewardTokenAddress) Ownable(msg.sender) {
         rewardToken = IRewardToken(_rewardTokenAddress);
@@ -38,6 +38,10 @@ contract StakingContract is Ownable {
         updateReward(msg.sender); // settle previous rewards
         payable(msg.sender).transfer(_amount);
         stakeMapping[msg.sender] -= _amount;
+    }
+
+    function getStakedValue() public view returns (uint256) {
+        return stakeMapping[msg.sender];
     }
 
     function getAvailableReward() public view returns (uint256) {
