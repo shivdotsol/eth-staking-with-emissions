@@ -1,17 +1,21 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.13;
+pragma solidity ^0.8.20;
 
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 
+interface IRewardToken {
+    function mintTo(address _address, uint256 _amount) external;
+}
+
 contract StakingContract is Ownable {
-    address rewardTokenContract;
+    IRewardToken rewardToken;
     mapping(address => uint256) stakeMapping;
     mapping(address => uint256) lastStakedTime;
     mapping(address => uint256) rewards;
     uint16 constant REWARD_MULTIPLIER = 1000;
 
-    constructor(address _rewardTokenContract) Ownable(msg.sender) {
-        rewardTokenContract = _rewardTokenContract;
+    constructor(address _rewardTokenAddress) Ownable(msg.sender) {
+        rewardToken = IRewardToken(_rewardTokenAddress);
     }
 
     function updateReward(address _address) private {
@@ -45,7 +49,7 @@ contract StakingContract is Ownable {
 
     function claimReward() public {
         updateReward(msg.sender);
-        // CCI ERC20 mintTo()
+        rewardToken.mintTo(msg.sender, rewards[msg.sender]);
         rewards[msg.sender] = 0;
         lastStakedTime[msg.sender] = block.timestamp;
     }
