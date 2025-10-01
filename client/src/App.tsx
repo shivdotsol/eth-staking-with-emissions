@@ -1,3 +1,8 @@
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { StatsPanel } from "./components/StatsPanel";
+import { StakingPanel } from "./components/StakingPanel";
+
+
 function App() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
@@ -18,17 +23,23 @@ function App() {
                   <p className="text-sm text-slate-400">Earn rewards by staking your ETH</p>
                 </div>
               </div>
-              {/* <WalletButton /> */}
+              <ConnectButton />
             </div>
           </div>
         </header>
 
-        <main className="container mx-auto px-4 py-12 space-y-8">
-          {/* <StatsPanel /> */}
+        <div className="container mx-auto mt-5 px-4">
+          <div className="w-fit px-4 py-2 rounded-xl border border-red-500/80 bg-red-500/20 text-red-500/80" >
+          <b>Disclaimer:</b> This is a personal project made for learning purposes so it <b>does't actually stake your ETH</b> . You can claim our custom token as rewards for staking.
+        </div>
+        </div>
+
+        <main className="container mx-auto px-4 py-8 space-y-8">
+          <StatsPanel />
 
           <div className="grid lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2">
-              {/* <StakingPanel /> */}
+              <StakingPanel />
             </div>
             <div className="lg:col-span-1">
               {/* <RewardsPanel /> */}
@@ -57,8 +68,8 @@ function App() {
           </div>
         </main>
 
-        <footer className="border-t border-slate-800/50 mt-20">
-          <div className="container mx-auto px-4 py-8 text-center text-slate-400 text-sm">
+        <footer>
+          <div className="container mx-auto text-center text-slate-400 text-sm">
             <p>Stake your ETH and earn rewards. Always verify the contract address before staking.</p>
           </div>
         </footer>

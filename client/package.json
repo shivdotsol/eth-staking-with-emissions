@@ -13,9 +13,12 @@
     "@rainbow-me/rainbowkit": "^2.2.8",
     "@tailwindcss/vite": "^4.1.13",
     "@tanstack/react-query": "^5.90.2",
+    "dotenv": "^17.2.3",
+    "lucide-react": "^0.544.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "tailwindcss": "^4.1.13",
+    "viem": "^2.37.9",
     "wagmi": "^2.17.5"
   },
   "devDependencies": {
