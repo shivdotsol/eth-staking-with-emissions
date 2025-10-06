@@ -1,12 +1,19 @@
-import { useState } from 'react';
-import { useAccount, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
-import { parseEther } from 'viem';
-import { ArrowDownCircle, ArrowUpCircle, Loader2 } from 'lucide-react';
-import { STAKING_CONTRACT_ADDRESS, STAKING_CONTRACT_ABI } from '../contracts/stakingContract';
+import { useState } from "react";
+import {
+  useAccount,
+  useWriteContract,
+  useWaitForTransactionReceipt,
+} from "wagmi";
+import { parseEther } from "viem";
+import { ArrowDownCircle, ArrowUpCircle, Loader2 } from "lucide-react";
+import {
+  STAKING_CONTRACT_ADDRESS,
+  STAKING_CONTRACT_ABI,
+} from "../contracts/stakingContract";
 
 export function StakingPanel() {
-  const [stakeAmount, setStakeAmount] = useState('');
-  const [unstakeAmount, setUnstakeAmount] = useState('');
+  const [stakeAmount, setStakeAmount] = useState("");
+  const [unstakeAmount, setUnstakeAmount] = useState("");
   const { address } = useAccount();
 
   const {
@@ -36,11 +43,11 @@ export function StakingPanel() {
       stake({
         address: STAKING_CONTRACT_ADDRESS,
         abi: STAKING_CONTRACT_ABI,
-        functionName: 'stake',
+        functionName: "stake",
         value: parseEther(stakeAmount),
       });
     } catch (error) {
-      console.error('Stake error:', error);
+      console.error("Stake error:", error);
     }
   };
 
@@ -51,18 +58,20 @@ export function StakingPanel() {
       unstake({
         address: STAKING_CONTRACT_ADDRESS,
         abi: STAKING_CONTRACT_ABI,
-        functionName: 'unstake',
+        functionName: "unStake",
         args: [parseEther(unstakeAmount)],
       });
     } catch (error) {
-      console.error('Unstake error:', error);
+      console.error("Unstake error:", error);
     }
   };
 
   if (!address) {
     return (
       <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-2xl p-8 text-center">
-        <p className="text-slate-400 text-lg">Connect your wallet to start staking</p>
+        <p className="text-slate-400 text-lg">
+          Connect your wallet to start staking
+        </p>
       </div>
     );
   }
@@ -101,10 +110,10 @@ export function StakingPanel() {
             {isStakePending || isStakeConfirming ? (
               <>
                 <Loader2 className="w-5 h-5 animate-spin" />
-                {isStakePending ? 'Confirming...' : 'Processing...'}
+                {isStakePending ? "Confirming..." : "Processing..."}
               </>
             ) : (
-              'Stake ETH'
+              "Stake ETH"
             )}
           </button>
         </div>
@@ -113,7 +122,6 @@ export function StakingPanel() {
       <div className="bg-gradient-to-br from-slate-800/80 to-slate-900/80 backdrop-blur-sm border border-slate-700 rounded-2xl p-6 shadow-xl">
         <div className="flex items-center gap-3 mb-6">
           <div className="p-2 bg-orange-500/10 rounded-lg">
-            
             <ArrowDownCircle className="w-6 h-6 text-orange-500" />
           </div>
           <h3 className="text-xl font-bold text-white">Unstake ETH</h3>
@@ -143,10 +151,10 @@ export function StakingPanel() {
             {isUnstakePending || isUnstakeConfirming ? (
               <>
                 <Loader2 className="w-5 h-5 animate-spin" />
-                {isUnstakePending ? 'Confirming...' : 'Processing...'}
+                {isUnstakePending ? "Confirming..." : "Processing..."}
               </>
             ) : (
-              'Unstake ETH'
+              "Unstake ETH"
             )}
           </button>
         </div>

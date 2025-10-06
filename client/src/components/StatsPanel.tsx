@@ -1,32 +1,36 @@
-import { useAccount, useReadContract } from 'wagmi';
-import { formatEther } from 'viem';
-import { Coins } from 'lucide-react';
-import { STAKING_CONTRACT_ADDRESS, STAKING_CONTRACT_ABI } from '../contracts/stakingContract';
+import { useAccount, useReadContract } from "wagmi";
+import { formatEther } from "viem";
+import { Coins } from "lucide-react";
+import {
+  STAKING_CONTRACT_ADDRESS,
+  STAKING_CONTRACT_ABI,
+} from "../contracts/stakingContract";
 export function StatsPanel() {
   const { address } = useAccount();
-
-  const { data: stakedAmount } = useReadContract({
+  const { data: stakedValue } = useReadContract({
     address: STAKING_CONTRACT_ADDRESS,
+    account: address,
     abi: STAKING_CONTRACT_ABI,
-    functionName: 'getStakedBalance',
-    args: address ? [address] : undefined,
-    query: {
-      enabled: !!address,
-      refetchInterval: 5000,
-    },
+    functionName: "getStakedValue",
+    chainId: 11155111,
   });
 
-  const stakedAmountFormatted = stakedAmount ? formatEther(stakedAmount as bigint) : '0.00';
+  console.log("//////////////////////////////////////////////");
+  console.log(stakedValue);
+  console.log("//////////////////////////////////////////////");
+
+  const stakedValueFormatted = stakedValue
+    ? formatEther(stakedValue as bigint)
+    : "0.00";
 
   const stats = [
-    
     {
       icon: Coins,
-      label: 'Current Staked Amount',
-      value: `${parseFloat(stakedAmountFormatted).toFixed(4)} ETH`,
-      color: 'from-emerald-600 to-green-500',
-      bgColor: 'bg-emerald-500/10',
-      iconColor: 'text-emerald-400',
+      label: "Current Staked Amount",
+      value: `${parseFloat(stakedValueFormatted).toFixed(4)} ETH`,
+      color: "from-emerald-600 to-green-500",
+      bgColor: "bg-emerald-500/10",
+      iconColor: "text-emerald-400",
       show: true,
     },
   ];
@@ -45,7 +49,9 @@ export function StatsPanel() {
             </div>
             <div className="space-y-2">
               <p className="text-sm font-medium text-slate-400">{stat.label}</p>
-              <p className={`text-2xl font-bold bg-gradient-to-r ${stat.color} text-transparent bg-clip-text`}>
+              <p
+                className={`text-2xl font-bold bg-gradient-to-r ${stat.color} text-transparent bg-clip-text`}
+              >
                 {stat.value}
               </p>
             </div>
