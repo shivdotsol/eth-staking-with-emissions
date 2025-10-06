@@ -10,5 +10,4 @@ export const config = getDefaultConfig({
     // [mainnet.id]: http(import.meta.env.VITE_MAINNET_RPC_URL),
     [sepolia.id]: http(import.meta.env.VITE_SEPOLIA_RPC_URL),
   },
-  batch: { multicall: false },
 });

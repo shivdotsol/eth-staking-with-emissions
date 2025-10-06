@@ -1,6 +1,6 @@
 import { useAccount, useReadContract } from "wagmi";
 import { formatEther } from "viem";
-import { Coins } from "lucide-react";
+import { Coins, TrendingUp } from "lucide-react";
 import {
   STAKING_CONTRACT_ADDRESS,
   STAKING_CONTRACT_ABI,
@@ -12,26 +12,41 @@ export function StatsPanel() {
     account: address,
     abi: STAKING_CONTRACT_ABI,
     functionName: "getStakedValue",
-    chainId: 11155111,
   });
 
-  console.log("//////////////////////////////////////////////");
-  console.log(stakedValue);
-  console.log("//////////////////////////////////////////////");
+  const { data: availableRewards } = useReadContract({
+    address: STAKING_CONTRACT_ADDRESS,
+    abi: STAKING_CONTRACT_ABI,
+    account: address,
+    functionName: "getAvailableReward",
+  });
 
   const stakedValueFormatted = stakedValue
     ? formatEther(stakedValue as bigint)
+    : "0.00";
+
+  const availableRewardsFormatted = availableRewards
+    ? formatEther(availableRewards as bigint)
     : "0.00";
 
   const stats = [
     {
       icon: Coins,
       label: "Current Staked Amount",
-      value: `${parseFloat(stakedValueFormatted).toFixed(4)} ETH`,
+      value: `${parseFloat(stakedValueFormatted).toFixed(5)} ETH`,
       color: "from-emerald-600 to-green-500",
       bgColor: "bg-emerald-500/10",
       iconColor: "text-emerald-400",
-      show: true,
+      show: !!address,
+    },
+    {
+      icon: TrendingUp,
+      label: "Available Rewards",
+      value: `${parseFloat(availableRewardsFormatted).toFixed(5)} RWD`,
+      color: "from-yellow-300 to-yellow-700",
+      bgColor: "bg-orange-500/10",
+      iconColor: "text-orange-400",
+      show: !!address,
     },
   ];
 
