@@ -1,20 +1,18 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.20;
 
-import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
-
 interface IRewardToken {
     function mintTo(address _address, uint256 _amount) external;
 }
 
-contract StakingContract is Ownable {
+contract StakingContract {
     IRewardToken rewardToken;
     mapping(address => uint256) stakeMapping;
     mapping(address => uint256) lastStakedTime;
     mapping(address => uint256) rewards;
     uint16 constant REWARD_MULTIPLIER = 10000;
 
-    constructor(address _rewardTokenAddress) Ownable(msg.sender) {
+    constructor(address _rewardTokenAddress) {
         rewardToken = IRewardToken(_rewardTokenAddress);
     }
 
