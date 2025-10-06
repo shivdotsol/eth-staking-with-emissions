@@ -1,6 +1,6 @@
-import { useAccount, useReadContract } from "wagmi";
+import { useAccount, useReadContract, useWriteContract } from "wagmi";
 import { formatEther } from "viem";
-import { Coins, TrendingUp } from "lucide-react";
+import { Coins, Gift, Loader2, TrendingUp } from "lucide-react";
 import {
   STAKING_CONTRACT_ADDRESS,
   STAKING_CONTRACT_ABI,
@@ -20,6 +20,9 @@ export function StatsPanel() {
     account: address,
     functionName: "getAvailableReward",
   });
+
+  const { writeContract: claimRewards, isPending: isClaimLoading } =
+    useWriteContract();
 
   const stakedValueFormatted = stakedValue
     ? formatEther(stakedValue as bigint)
@@ -50,6 +53,19 @@ export function StatsPanel() {
     },
   ];
 
+  const handleClaim = async () => {
+    try {
+      claimRewards({
+        address: STAKING_CONTRACT_ADDRESS,
+        abi: STAKING_CONTRACT_ABI,
+        functionName: "claimReward",
+        account: address,
+      });
+    } catch {
+      alert("error while claiming rewards.");
+    }
+  };
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
       {stats
@@ -72,6 +88,40 @@ export function StatsPanel() {
             </div>
           </div>
         ))}
+      <div className="bg-gradient-to-br from-blue-900/30 to-cyan-900/30 backdrop-blur-sm border border-blue-500/30 rounded-2xl p-8 shadow-xl">
+        <div className="flex items-start justify-between">
+          <div className="flex-1">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-3 bg-blue-500/10 rounded-xl">
+                <Gift className="w-7 h-7 text-blue-400" />
+              </div>
+              <div>
+                <p className="text-sm text-slate-400">
+                  Claim your earned tokens
+                </p>
+              </div>
+            </div>
+
+            <button
+              onClick={handleClaim}
+              disabled={isClaimLoading}
+              className="px-8 py-3 bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-semibold rounded-xl hover:from-blue-700 hover:to-cyan-600 disabled:from-slate-700 disabled:to-slate-700 disabled:cursor-not-allowed transition-all duration-200 shadow-lg hover:shadow-xl flex items-center gap-2"
+            >
+              {isClaimLoading ? (
+                <>
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                  Processing...
+                </>
+              ) : (
+                <>
+                  <Gift className="w-5 h-5" />
+                  Claim Rewards
+                </>
+              )}
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
